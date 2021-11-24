@@ -51,13 +51,15 @@ main {
   padding-right: 4px;
 }
 
-.Button-active {
-  background-color: black;
-  color: white;
+.Button-text {
+  /* default button styles go here... */
 }
 
-.Button-not-active {
-
+.Button-text-active {
+  text-decoration: underline;
+  text-decoration-color: unset;
+  text-decoration-style: dotted;
+  text-decoration-thickness: 5px;
 }
 
 .Grid-container {

@@ -43,11 +43,11 @@ export default function SudokuGrid(props: Props) {
 
   const tryToUpdateCell = (x: number, y: number, value: string) => {
     if (value === '') {
-      props.onUpdate({x, y, value: 0});
+      props.onUpdate({ x, y, value: 0 });
     }
 
     if (/^[0-9]$/.test(value)) {
-      props.onUpdate({x, y, value: parseInt(value)});
+      props.onUpdate({ x, y, value: parseInt(value) });
     }
   }
 
@@ -64,7 +64,7 @@ export default function SudokuGrid(props: Props) {
                     className="Grid-input"
                     value={value === 0 ? '' : `${value}`}
                     onChange={(e) => tryToUpdateCell(x, y, e.target.value)}
-                    />
+                  />
                 </div>
               </td>
             ))}

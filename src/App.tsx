@@ -12,6 +12,16 @@ import { pt, Sudoku, SudokuSolution } from './utils/sudoku';
 const levels = ["Easy", "Intermediate", "Hard", "Evil"];
 const empty = emptySudoku();
 
+const buttonTextClasses = (active: boolean) => {
+  const classes = ['Button-text'];
+
+  if (active) {
+    classes.push('Button-text-active');
+  }
+
+  return classes.join(' ');
+}
+
 function App() {
   const [rawSudoku, setRawSudoku] = useState(empty);
   const [level, setLevel] = useState(0);
@@ -54,11 +64,10 @@ function App() {
           <div className="App-controls-container">
             {levels.map((levelName, levelOption) => (
               <Button
-                disabled={levelOption === level}
                 onClick={() => setLevel(levelOption)}
                 key={levelOption}
               >
-                {levelName}
+                <span className={buttonTextClasses(levelOption === level)}>{levelName}</span>
               </Button>
             ))}
           </div>
