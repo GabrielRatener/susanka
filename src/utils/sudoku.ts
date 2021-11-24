@@ -131,3 +131,23 @@ export class SudokuSolution extends Sudoku {
 export const createPossibleValuesSet = () => {
   return new Set([1, 2, 3, 4, 5, 6, 7, 8, 9]);
 }
+
+export class PointMap<T> {
+  private internalMap = new Map<number, T>();
+
+  has(x: number, y: number) {
+    return this.internalMap.has(pt(x, y));
+  }
+
+  get(x: number, y: number) {
+    return this.internalMap.get(pt(x, y));
+  }
+
+  set(x: number, y: number, value: T) {
+    return this.internalMap.set(pt(x, y), value);
+  }
+
+  get size() {
+    return this.internalMap.size;
+  }
+}
