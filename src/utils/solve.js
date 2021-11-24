@@ -10,7 +10,8 @@ export const solve = (sudoku) => {
 
     fillInRows(solution)
     fillInColumns(solution)
-    
+
+    // if sudoku doesn't change or is solved we're done!
     if (fillCount === solution.fillCount || solution.isSolved) {
       break;
     }
@@ -57,7 +58,7 @@ const fillInColumns = (sudokuSolution) => {
       if (sudokuSolution.at(x, y) !== 0) {
         possibleValues.delete(sudokuSolution.at(x, y));
       } else {
-        if (emptyX !== null) { // we've seen an empty cell before so we give up on this row...
+        if (emptyX !== null) {
           break;
         } else {
           emptyX = x;
