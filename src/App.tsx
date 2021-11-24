@@ -1,8 +1,7 @@
 
-import { Button, Divider, Box } from '@mui/material'
-import React, { useState } from 'react';
+import { Button, Box } from '@mui/material'
+import { useState } from 'react';
 
-import logo from './logo.svg';
 import './App.css';
 import SudokuGrid from './components/SudokuGrid';
 import { emptySudoku, stringToSudoku } from './utils/transform';
