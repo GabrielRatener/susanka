@@ -9,17 +9,21 @@ export type CellValue = number;
 
 export class PossibilitiesSet extends Set<number> {
   private solution: SudokuSolution;
+  private locked: boolean;
 
   constructor(solution: SudokuSolution) {
     super([1, 2, 3, 4, 5, 6, 7, 8, 9]);
 
-    this.solution = solution
+    this.solution = solution;
+    this.locked = true;
   }
 
-  add(_: number) {
-    throw new Error("Cannot add values to possibilities set");
-
-    return this;
+  add(value: number) {
+    if (this.locked) {
+      throw new Error("Cannot add values to possibilities set");
+    } else {
+      return super.add(value);
+    }
   }
 
   delete(value: number) {
