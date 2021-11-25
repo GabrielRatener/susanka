@@ -33,6 +33,7 @@ function App() {
     const string = collection[Math.floor(collection.length * Math.random())];
     const rawSudoku = stringToSudoku(string);
 
+    setReadonly(false);
     setOriginalSudoku(rawSudoku);
     setRawSudoku(rawSudoku);
   }
