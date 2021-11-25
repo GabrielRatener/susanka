@@ -8,19 +8,14 @@ export const solve = (sudoku) => {
   const solution = new SudokuSolution(sudoku);
 
   while (true) {
-    const fillCount = solution.fillCount;
+    const lastScore = solution.solvedScore;
 
     fillInCells(solution)
 
     // if sudoku doesn't change or is solved we're done!
-    if (fillCount === solution.fillCount || solution.isSolved) {
+    if (lastScore === solution.solvedScore || solution.isSolved) {
       break;
     }
-
-    // TODO: solve sudoku
-    // use solution.fillCell(x, y, value) to fill in values
-    // use solution.at(x, y) to view values
-    // use solution.isSolved() to see if sudoku is completely solved
   }
 
   return solution;
@@ -103,7 +98,6 @@ const fillInCells = (sudokuSolution) => {
         if (possibleValues.size === 1) {
           sudokuSolution.fillCell(x, y, getFirstSetValue(possibleValues))
         }
-
       }
     }
   }
