@@ -99,7 +99,7 @@ main {
 
 .Grid-solved-tile .Grid-input {
   animation-name: solve-tile;
-  animation-duration: 1s;
+  animation-duration: .5s;
 }
 
 .Grid-input {

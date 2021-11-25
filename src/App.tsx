@@ -26,6 +26,7 @@ function App() {
   const [originalSudoku, setOriginalSudoku] = useState(empty);
   const [rawSudoku, setRawSudoku] = useState(empty);
   const [level, setLevel] = useState(0);
+  const [readonly, setReadonly] = useState(false);
 
   const displayRandom = () => {
     const collection = sudokuLevels[level];
@@ -40,6 +41,7 @@ function App() {
     const sudoku = new Sudoku(rawSudoku);
     const solution = solve(sudoku) as SudokuSolution;
 
+    setReadonly(true);
     setRawSudoku(solution.toRawArray());
   }
 
@@ -50,15 +52,18 @@ function App() {
     newRawSudoku[index] = value;
 
     setRawSudoku(newRawSudoku);
+    setOriginalSudoku(newRawSudoku);
   }
 
   const clearBoard = () => {
     setRawSudoku(emptySudoku);
     setOriginalSudoku(emptySudoku);
+    setReadonly(false);
   }
 
   const resetSudoku = () => {
     setRawSudoku(originalSudoku);
+    setReadonly(false);
   }
 
   return (
@@ -81,6 +86,7 @@ function App() {
           <div className="Grid-container">
             <SudokuGrid
               value={rawSudoku}
+              readonly={readonly}
               original={originalSudoku}
               onUpdate={(update) => updateSudoku(update.x, update.y, update.value)}
             />

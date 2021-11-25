@@ -13,7 +13,7 @@ interface UpdateEvent {
 interface Props {
   value: number[];
   original: number[] | null;
-  solving: boolean;
+  readonly: boolean;
   onUpdate: UpdateListener;
 }
 
@@ -32,15 +32,16 @@ export default function SudokuGrid(props: Props) {
     }
   }
 
-  const isOriginal = (x: number, y: number) =>
-    (props.original !== null && props.original[pt(x, y)] > 0);
+  const isOriginal = (x: number, y: number) => (
+    props.original !== null &&
+    props.original[pt(x, y)] > 0
+  );
 
-  const isDisabled = (x: number, y: number) => {
-    return (
-      props.solving ||
-      isOriginal(x, y)
-    )
-  }
+  const isSolved = (x: number, y: number) => (
+    props.original !== null &&
+    props.original[pt(x, y)] === 0 &&
+    props.value[pt(x, y)] > 0
+  );
 
   const cellClasses = (x: number, y: number) => {
     const classes = ['Grid-cell'];
@@ -65,7 +66,7 @@ export default function SudokuGrid(props: Props) {
       classes.push('Grid-original-tile');
     }
 
-    if (!isOriginal(x, y) && props.value[pt(x, y)] > 0) {
+    if (isSolved(x, y)) {
       classes.push('Grid-solved-tile');
     }
 
@@ -83,7 +84,7 @@ export default function SudokuGrid(props: Props) {
                   <input
                     type="text"
                     className="Grid-input"
-                    readOnly={isDisabled(x, y)}
+                    readOnly={props.readonly}
                     value={value === 0 ? '' : `${value}`}
                     onChange={(e) => tryToUpdateCell(x, y, e.target.value)}
                   />
@@ -99,6 +100,6 @@ export default function SudokuGrid(props: Props) {
 
 SudokuGrid.defaultProps = {
   original: emptySudoku() as number[],
-  onUpdate: ((e: UpdateEvent) => void 0) as UpdateListener,
-  solving: false
+  onUpdate: ((_: UpdateEvent) => void 0) as UpdateListener,
+  readonly: false
 }
