@@ -23,6 +23,7 @@ const buttonTextClasses = (active: boolean) => {
 }
 
 function App() {
+  const [originalSudoku, setOriginalSudoku] = useState(empty);
   const [rawSudoku, setRawSudoku] = useState(empty);
   const [level, setLevel] = useState(0);
 
@@ -31,6 +32,7 @@ function App() {
     const string = collection[Math.floor(collection.length * Math.random())];
     const rawSudoku = stringToSudoku(string);
 
+    setOriginalSudoku(rawSudoku);
     setRawSudoku(rawSudoku);
   }
 
@@ -72,7 +74,11 @@ function App() {
             ))}
           </div>
           <div className="Grid-container">
-            <SudokuGrid value={rawSudoku} onUpdate={(update) => updateSudoku(update.x, update.y, update.value)} />
+            <SudokuGrid
+              value={rawSudoku}
+              original={originalSudoku}
+              onUpdate={(update) => updateSudoku(update.x, update.y, update.value)}
+            />
           </div>
           <div className="App-controls-container">
             <Box display="flex" justifyContent="space-between">

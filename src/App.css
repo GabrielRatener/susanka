@@ -83,6 +83,10 @@ main {
   box-sizing: border-box;
 }
 
+.Grid-original-tile {
+  background-color: #ddd;
+}
+
 .Grid-input {
   height: calc(100%);
   width: calc(100%);
