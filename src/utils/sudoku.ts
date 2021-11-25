@@ -7,6 +7,30 @@ export const pt = (x: number, y: number) => y * 9 + x;
 
 export type CellValue = number;
 
+export class PossibilitiesSet extends Set<number> {
+  private solution: SudokuSolution;
+
+  constructor(solution: SudokuSolution) {
+    super([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+
+    this.solution = solution
+  }
+
+  add(_: number) {
+    throw new Error("Cannot add values to possibilities set");
+
+    return this;
+  }
+
+  delete(value: number) {
+    if (this.has(value)) {
+      this.solution.updateSolvedScore();
+    }
+
+    return super.delete(value);
+  }
+}
+
 export const boxPointsAt = function* (x: number, y: number) {
   const baseY = Math.floor(y / 3);
   const baseX = Math.floor(x / 3);
@@ -74,6 +98,10 @@ export class Sudoku {
 export class SudokuSolution extends Sudoku {
   private fills: Map<number, number>;
   private initialFillCount: number;
+  private initialSolvedScore: number;
+  private possibilitySets: Map<number, PossibilitiesSet>;
+
+  solvedScoreSubtraction = 0;
 
   constructor(sudoku: Sudoku) {
     super(sudoku.initial);
@@ -81,6 +109,12 @@ export class SudokuSolution extends Sudoku {
     this.fills = new Map();
     this.initialFillCount =
       sudoku.initial.reduce((count, value) => (value > 0) ? count + 1 : count, 0);
+    this.initialSolvedScore = 9 * (9 * 9 - this.initialFillCount);
+    this.possibilitySets = new Map<number, PossibilitiesSet>();
+  }
+
+  updateSolvedScore(subtraction = 1) {
+    this.solvedScoreSubtraction += subtraction;
   }
 
   at(x: number, y: number): number {
@@ -96,13 +130,18 @@ export class SudokuSolution extends Sudoku {
   fillCell(x: number, y: number, value: number) {
     if (value === 0) {
       throw new Error(`Cannot set cell to empty (value = 0).`)
-    }
-
-    if (!this.cellIsEmpty(x, y)) {
+    } else if (!this.cellIsEmpty(x, y)) {
       throw new Error(`Cannot fill (${x},${y}), cell not empty.`)
-    }
+    } else {
+      const { size } = this.cellPossibilitiesSet(x, y);
 
-    this.fills.set(pt(x, y), value);
+      this.updateSolvedScore(size);
+      this.fills.set(pt(x, y), value);
+
+      if (this.possibilitySets.has(pt(x, y))) {
+        this.possibilitySets.delete(pt(x, y));
+      }
+    }
   }
 
   cellIsSolved(x: number, y: number) {
@@ -115,12 +154,28 @@ export class SudokuSolution extends Sudoku {
     return this.initial[index] === 0 && !this.fills.has(index);
   }
 
+  cellPossibilitiesSet(x: number, y: number) {
+    if (this.possibilitySets.has(pt(x, y))) {
+      return this.possibilitySets.get(pt(x, y)) as PossibilitiesSet;
+    } else {
+      const set = new PossibilitiesSet(this);
+
+      this.possibilitySets.set(pt(x, y), set);
+
+      return set;
+    }
+  }
+
   toRawArray() {
     return [...this.values()];
   }
 
   get fillCount() {
     return this.initialFillCount + this.fills.size;
+  }
+
+  get solvedScore() {
+    return this.initialSolvedScore - this.solvedScoreSubtraction;
   }
 
   get isSolved() {
