@@ -13,6 +13,11 @@
   }
 }
 
+@keyframes solve-tile {
+  from {transform: translateZ(-1000px);}
+  to {transform: translateZ(0);}
+}
+
 main {
   text-align: center;
 }
@@ -74,6 +79,8 @@ main {
 .Grid-table-cell {
   padding: 0px;
   border: 0px;
+  -webkit-perspective: 200px;
+	perspective: 200px;
 }
 
 .Grid-cell {
@@ -81,13 +88,23 @@ main {
   width: 50px;
   border: 1px solid #ccc;
   box-sizing: border-box;
+  -webkit-perspective: 200px;
+	perspective: 200px;
+  /* backface-visibility: hidden; */
 }
 
 .Grid-original-tile {
-  background-color: #ddd;
+  background-color: #eee;
+}
+
+.Grid-solved-tile .Grid-input {
+  animation-name: solve-tile;
+  animation-duration: 1s;
 }
 
 .Grid-input {
+  background-color: transparent;
+
   height: calc(100%);
   width: calc(100%);
 

@@ -32,10 +32,13 @@ export default function SudokuGrid(props: Props) {
     }
   }
 
+  const isOriginal = (x: number, y: number) =>
+    (props.original !== null && props.original[pt(x, y)] > 0);
+
   const isDisabled = (x: number, y: number) => {
     return (
       props.solving ||
-      (props.original !== null && props.original[pt(x, y)] > 0)
+      isOriginal(x, y)
     )
   }
 
@@ -58,8 +61,12 @@ export default function SudokuGrid(props: Props) {
       classes.push('Grid-top-border');
     }
 
-    if (props.original !== null && props.original[pt(x, y)] > 0) {
+    if (isOriginal(x, y) && props.original !== props.value) {
       classes.push('Grid-original-tile');
+    }
+
+    if (!isOriginal(x, y) && props.value[pt(x, y)] > 0) {
+      classes.push('Grid-solved-tile');
     }
 
     return classes.join(' ');
@@ -76,7 +83,7 @@ export default function SudokuGrid(props: Props) {
                   <input
                     type="text"
                     className="Grid-input"
-                    disabled={isDisabled(x, y)}
+                    readOnly={isDisabled(x, y)}
                     value={value === 0 ? '' : `${value}`}
                     onChange={(e) => tryToUpdateCell(x, y, e.target.value)}
                   />

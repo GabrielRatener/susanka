@@ -54,6 +54,11 @@ function App() {
 
   const clearBoard = () => {
     setRawSudoku(emptySudoku);
+    setOriginalSudoku(emptySudoku);
+  }
+
+  const resetSudoku = () => {
+    setRawSudoku(originalSudoku);
   }
 
   return (
@@ -88,6 +93,9 @@ function App() {
                 </Button>
                 <Button variant="outlined" onClick={() => clearBoard()}>
                   Clear
+                </Button>
+                <Button variant="outlined" onClick={() => resetSudoku()}>
+                  Reset
                 </Button>
               </div>
               <Button variant="contained" onClick={() => solveSudoku()}>
